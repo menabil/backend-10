@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+
 const todoSchema = new Schema({
   task: {
     type: String,
-    require: true,
+    required: true,
   },
   priority: {
     type: String,
     enum: ["Low", "Mid", "High"],
-    require: true,
+    required: true,
   },
   status: {
     type: String,
