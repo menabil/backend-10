@@ -1,16 +1,35 @@
 const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
 const app = express();
-
-app.use(express.json());
+const mongoose = require("mongoose");
+const {
+  createTodo,
+  allTodo,
+  deleteTodo,
+  updateTodo,
+} = require("./controllers/todoController");
+const dns = require("node:dns").setServers(["1.1.1.1"], ["8.8.8.8"]);
+const cors = require("cors");
 
 mongoose
   .connect(
     "mongodb+srv://root:admin123@practice.4u2mmnp.mongodb.net/class08?appName=Practice",
   )
-  .then(() => console.log("Connected to MongoDB"));
+  .then(() => {
+    console.log("DB Connected");
+  });
+
+app.use(cors());
+
+app.use(express.json());
+
+app.post("/todo", createTodo);
+
+app.get("/allTodo", allTodo);
+
+app.delete("/delete/:id", deleteTodo);
+
+app.post("/update/:id", updateTodo);
 
 app.listen(5000, () => {
-  console.log("Server is Running");
+  console.log("Server is running");
 });
