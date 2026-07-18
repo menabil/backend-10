@@ -1,5 +1,4 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const {
   createTodo,
   allTodo,
@@ -11,17 +10,9 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const app = express();
+const dbConnection = require("./config/databaseConfig");
 
-mongoose
-  .connect(
-    "mongodb+srv://root:admin123@practice.4u2mmnp.mongodb.net/class08?appName=Practice",
-  )
-  .then(() => {
-    console.log("DB Connected");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+dbConnection();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
