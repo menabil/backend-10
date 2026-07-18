@@ -1,3 +1,4 @@
+const dns = require("node:dns").setServers(["1.1.1.1"], ["8.8.8.8"]);
 const express = require("express");
 const {
   createTodo,
@@ -5,30 +6,15 @@ const {
   deleteTodo,
   updateTodo,
 } = require("./controllers/todoController");
-const dns = require("node:dns").setServers(["1.1.1.1"], ["8.8.8.8"]);
 const cors = require("cors");
-const multer = require("multer");
-const path = require("path");
 const app = express();
 const dbConnection = require("./config/databaseConfig");
+const upload = require("./utils/storage");
 
 dbConnection();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  },
-});
-
-const upload = multer({ storage: storage });
-
 app.use(cors());
 app.use(express.json());
-
 app.use("/uploads", express.static("uploads"));
 
 app.post("/todo", upload.single("image"), createTodo);
